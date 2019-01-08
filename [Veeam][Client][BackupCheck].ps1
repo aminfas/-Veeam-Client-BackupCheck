@@ -3,11 +3,11 @@
 #Company: IFP Informatik AG
 #Funktion: Überprüft Veeam for Windows (Client Edition) ob das Backup erfolgreich ist.
 
-[int]$Dayback = $args[0]
-$BackupZyklusTage = $args[1]
+$BackupZyklusTage = "Mi:DI:MI:DO"
+$AnzhlFehler = 0 
+$FehlerTag
 
-switch($Zyklus.Split(':')){
-
+switch($BackupZyklusTage.Split(':')){
     
     'MO'{
     $Checkday =  Get-EventLog -LogName "Veeam Agent" -Newest 7 | Select-Object @{n='TimeGenerated';e={Get-Date ($_.timegenerated) -UFormat %A}} | Select-Object TimeGenerated -ExpandProperty TimeGenerated
@@ -25,25 +25,29 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Montagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $FehlerTag = Write-Host "Montagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Montagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $FehlerTag = Write-Host "Montagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
 
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Montagssicherung konnte nicht durchgefuehrt werden"
+    $FehlerTag  = Write-Host "Ueberpruefung fuer Montagssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
 
     }
 
 
     }else{
-    Write-Host "Montag wurde kein Backup ausgefuehrt!"
+        $FehlerTag  = Write-Host "Montag wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
 
     }
@@ -64,25 +68,27 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Dienstagssicherung wurde nicht erfolgreich durchgefuehrt"
+        $FehlerTag = Write-Host "Dienstagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Dienstagssicherung nur bedingt erfolgreich durchgefuehrt"
-
+        $FehlerTag = Write-Host "Dienstagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Dienstagssicherung konnte nicht durchgefuehrt werden"
-
+        $FehlerTag = Write-Host "Ueberpruefung fuer Dienstagssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
     }
 
 
     }else{
-    Write-Host "Dienstag wurde kein Backup ausgefuehrt!"
+        $FehlerTag = Write-Host "Dienstag wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
     }
     
@@ -102,25 +108,26 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Mittwochssicherung wurde nicht erfolgreich durchgefuehrt"
-    
+        $FehlerTag = Write-Host "Mittwochssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Mittwochssicherung nur bedingt erfolgreich durchgefuehrt"
-
+        $FehlerTag = Write-Host "Mittwochssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Mittwochssicherung konnte nicht durchgefuehrt werden"
-
+        $FehlerTag = Write-Host "Ueberpruefung fuer Mittwochssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
     }
 
 
     }else{
-    Write-Host "Mittwoch wurde kein Backup ausgefuehrt!"
+        $FehlerTag = Write-Host "Mittwoch wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
     }
     
@@ -140,25 +147,26 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Donnerstagssicherung wurde nicht erfolgreich durchgefuehrt"
-    
+        $FehlerTag = Write-Host "Donnerstagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Donnerstagssicherung nur bedingt erfolgreich durchgefuehrt"
-
+        $FehlerTag = Write-Host "Donnerstagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Donnerstagssicherung konnte nicht durchgefuehrt werden"
-
+        $FehlerTag = Write-Host "Ueberpruefung fuer Donnerstagssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
     }
 
 
     }else{
-    Write-Host "Donnerstag wurde kein Backup ausgefuehrt!"
+        $FehlerTag = Write-Host "Donnerstag wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
     }
     
@@ -178,25 +186,26 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Freitagssicherung wurde nicht erfolgreich durchgefuehrt"
-    
+        $FehlerTag = Write-Host "Freitagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Freitagssicherung nur bedingt erfolgreich durchgefuehrt"
-
+        $FehlerTag = Write-Host "Freitagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Freitagssicherung konnte nicht durchgefuehrt werden"
-
+        $FehlerTag = Write-Host "Ueberpruefung fuer Freitagssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
     }
 
 
     }else{
-    Write-Host "Freitag wurde kein Backup ausgefuehrt!"
+        $FehlerTag = Write-Host "Freitag wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
     }
     
@@ -217,25 +226,26 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Samstagssicherung wurde nicht erfolgreich durchgefuehrt"
-    
+        $FehlerTag = Write-Host "Samstagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Samstagssicherung nur bedingt erfolgreich durchgefuehrt"
-
+        $FehlerTag = Write-Host "Samstagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Samstagssicherung konnte nicht durchgefuehrt werden"
-
+        $FehlerTag = Write-Host "Ueberpruefung fuer Samstagssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
     }
 
 
     }else{
-    Write-Host "Samstag wurde kein Backup ausgefuehrt!"
+        $FehlerTag = Write-Host "Samstag wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
     }
 
@@ -255,28 +265,33 @@ switch($Zyklus.Split(':')){
 
     if($CheckSuccess -eq $null -and $CheckFailed -ne $null){
     
-    Write-Host "Sonntagssicherung wurde nicht erfolgreich durchgefuehrt"
-    
+        $FehlerTag = Write-Host "Sonntagssicherung wurde nicht erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
 
     if($CheckSuccess -ne $null -and $CheckFailed -ne $null){
     
-    Write-Host "Sonntagssicherung nur bedingt erfolgreich durchgefuehrt"
-
+        $FehlerTag =  Write-Host "Sonntagssicherung nur bedingt erfolgreich durchgefuehrt"
+    $AnzhlFehler += 1
     }
     
     if($CheckSuccess -eq $null -and $CheckFailed -eq $null){
     
-    Write-Host "Ueberpruefung fuer Sonntagssicherung konnte nicht durchgefuehrt werden"
-
+        $FehlerTag = Write-Host "Ueberpruefung fuer Sonntagssicherung konnte nicht durchgefuehrt werden"
+    $AnzhlFehler += 1
     }
 
 
     }else{
-    Write-Host "Sonntag wurde kein Backup ausgefuehrt!"
+        $FehlerTag = Write-Host "Sonntag wurde kein Backup ausgefuehrt!"
+    $AnzhlFehler += 1
     }
     }
 
     Default{Write-Host 'Wochentag nicht gefunden, bitte Wochentage zusammenhängend übergeben Beispiel: MO:DI:MI:FR:SA'}
 }
+
+
+Write-Host "Anzahl Fehler: $AnzhlFehler"
+Write-Host $FehlerTag
 
